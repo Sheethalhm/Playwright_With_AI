@@ -4,30 +4,29 @@ import { ai } from "@zerostep/playwright";
 test('Click on First product', async ({ page }) => {
     const aiArgs = {page,test};
     await page.goto('https://demowebshop.tricentis.com/desktops');
-    await ai('Click on the first product', aiArgs , async () => {
+    await ai('Click on the first product', aiArgs )
+    await expect(page).toHaveURL(/.*simple-computer/);
+    await expect(page.locator('.product-name')).toHaveText('Simple Computer');
+    await expect(page.locator('.product-price')).toHaveText('800.00');
+    await expect(page.locator('.qty-input')).toHaveValue('1');
+    await ai('Change Qty details to two', aiArgs);
+    await expect(page.locator('.qty-input')).toHaveValue('2');
 
-        const firstProduct = await page.locator('.product-item').first();
-        await firstProduct.click();
-        await expect(page).toHaveURL(/.*desktops/);
-        await expect(page.locator('.product-name')).toHaveText('Build your own cheap computer');
-        await ai('Verify product details', aiArgs, async () => {
-            await expect(page.locator('.sku')).toHaveText('SKU: 1');
-            await expect(page.locator('.price')).toHaveText('$1,200.00');
-            await expect(page.locator('.product-quantity input')).toHaveValue('1');
-        })
-    });
-});
+})
+
 
 test('Add product to cart', async ({ page }) => {
     const aiArgs = {page,test};
     await page.goto('https://demowebshop.tricentis.com/desktops');
-    await ai('Add product to cart', aiArgs, async () => {
-        const firstProduct = await page.locator('.product-item').first();
-        await firstProduct.click();
-        await expect(page).toHaveURL(/.*desktops/);
-        await page.locator('.add-to-cart-button').click();
-        await expect(page.locator('.bar-notification')).toContainText('The product has been added to your shopping cart');
-    });
+    await ai('Click on the Simple computer product', aiArgs);
+    await expect(page).toHaveURL(/.*simple-computer/);
+    // Select a processor option before adding to cart
+    await ai('Select processor option', aiArgs);
+    await expect(page.locator('#product_attribute_75_5_31_96')).toBeChecked();
+    //Click on Add to cart button
+    await ai('Click on Add to cart button', aiArgs);
+    await expect(page.locator('.bar-notification')).toContainText('The product has been added to your shopping cart');
+    
 });
 
 test('Verify cart contents', async ({ page }) => {
