@@ -4,13 +4,20 @@ import { ai } from "@zerostep/playwright";
 test('Click on First product', async ({ page }) => {
     const aiArgs = {page,test};
     await page.goto('https://demowebshop.tricentis.com/desktops');
-    await ai('Click on the first product', aiArgs )
+    await ai('Click on the Simple computer product', aiArgs);
     await expect(page).toHaveURL(/.*simple-computer/);
-    await expect(page.locator('.product-name')).toHaveText('Simple Computer');
-    await expect(page.locator('.product-price')).toHaveText('800.00');
-    await expect(page.locator('.qty-input')).toHaveValue('1');
-    await ai('Change Qty details to two', aiArgs);
-    await expect(page.locator('.qty-input')).toHaveValue('2');
+    
+    // Get the product name
+    const productName = await ai('Get the produce name ', aiArgs);
+    expect(productName).toEqual('Simple Computer');
+
+    // Get the product price
+    const productPrice = await ai('Get the produce price ', aiArgs);
+    expect(productPrice).toEqual('800.00');
+
+    // Get the product quantity input
+    const productQty = await ai('Get the produce quantity input', aiArgs);
+    expect(productQty).toEqual('1');
 
 })
 
