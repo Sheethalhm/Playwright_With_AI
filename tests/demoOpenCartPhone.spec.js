@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 import { ai } from "@zerostep/playwright";
 
 test('Click on First product', async ({ page }) => {
