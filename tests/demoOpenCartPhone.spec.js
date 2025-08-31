@@ -92,6 +92,7 @@ test('Remove product from cart', async ({ page }) => {
     await ai('Change the product quantity to zero', aiArgs);
     const productQty = await page.locator('input[name^="itemquantity"]').inputValue();
     expect(productQty).toEqual('0');
+    await page.goto('https://demowebshop.tricentis.com/cart');
 
 });
 
